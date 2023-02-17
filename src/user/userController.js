@@ -66,5 +66,25 @@ var deleteUserControllerFunc = async(req, res)=> {
 
 }
 
+var updateUserControllerFunc = async(req, res)=> {
+    var result = null;
+    try {
+        result = await userService.updateUserDBService(req.body);
+        if (result.status){
+            res.send({"status": true, "message": result.msg});
+        } else {
+            res.send({"status": false, "message":result.msg});
+        }
+    }catch (err) {
+        console.error(err);
+        res.send({"status": false, "message": err.msg || "Error al actualizar el usuario"});
+    }
+    
+}
 
-module.exports = { createUserControllerFunc, loginUserControllerFunc , searchUserControllerFunc, deleteUserControllerFunc};
+
+
+
+
+
+module.exports = { createUserControllerFunc, loginUserControllerFunc , searchUserControllerFunc, deleteUserControllerFunc, updateUserControllerFunc};

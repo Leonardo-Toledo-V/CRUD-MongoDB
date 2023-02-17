@@ -82,7 +82,7 @@ module.exports.searchUserDBService = (userDetails)=>{
 
 module.exports.deleteUserDBService = (userDetails)=>{
    return new Promise(function myFn(resolve, reject)  {
-      userModel.findOne({ email: userDetails.email},function getresult(errorvalue, result) {
+      userModel.findOneAndDelete({ email: userDetails.email},function getresult(errorvalue, result) {
          if(errorvalue) {
             reject({status: false, msg: "Datos Invalidos"});
          }
@@ -91,7 +91,41 @@ module.exports.deleteUserDBService = (userDetails)=>{
                
 
                if(result.email = userDetails.email) {
-                  resolve({status: true,msg: "Usuario existente "+ result.email});
+                  resolve({status: true,msg: "Usuario eliminado"});
+               }
+            }
+            else {
+               reject({status: false,msg: "User not found"});
+            }
+         }
+      });
+   });
+}
+
+
+
+module.exports.updateUserDBService = (userDetails)=>{
+   return new Promise(function myFn(resolve, reject)  {
+      var encrypted = encryptor.encrypt(userDetails.password);
+      userModel.findOneAndUpdate(
+         {email: userDetails.email},
+         {$set:{
+            password: encrypted,
+            firstname: userDetails.firstname,
+            lastname: userDetails.lastname
+            }
+         },
+         {new: true},
+         function getresult(errorvalue, result) {
+         if(errorvalue) {
+            reject({status: false, msg: "Datos Invalidos"});
+         }
+         else {
+            if(result !=undefined &&  result !=null) {
+               
+
+               if(result.email = userDetails.email) {
+                  resolve({status: true,msg: "Usuario actualizado"});
                }
             }
             else {
