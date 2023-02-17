@@ -106,11 +106,10 @@ module.exports.deleteUserDBService = (userDetails)=>{
 
 module.exports.updateUserDBService = (userDetails)=>{
    return new Promise(function myFn(resolve, reject)  {
-      var encrypted = encryptor.encrypt(userDetails.password);
       userModel.findOneAndUpdate(
          {email: userDetails.email},
          {$set:{
-            password: encrypted,
+            password: encryptor.encrypt(userDetails.password),
             firstname: userDetails.firstname,
             lastname: userDetails.lastname
             }
